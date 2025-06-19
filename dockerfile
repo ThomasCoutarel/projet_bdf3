@@ -16,7 +16,7 @@ RUN curl -fsSL https://downloads.apache.org/spark/spark-${SPARK_VERSION}/spark-$
     mv /opt/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION} ${SPARK_HOME}
 
 RUN pip install --no-cache-dir pyspark==${SPARK_VERSION}
-
+RUN pip install --no-cache-dir kagglehub
 WORKDIR /app
 
-CMD ["python", "main.py"]
+CMD ["tail", "-f", "/dev/null"]

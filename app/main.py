@@ -1,30 +1,33 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col
+import os
 
 # Créer une session Spark
 spark = SparkSession.builder \
-    .appName("Test PySpark") \
+    .appName("Write CSV Example") \
     .getOrCreate()
 
-# Créer un DataFrame en mémoire
+# Exemple de données
 data = [
-    ("Alice", 25),
-    ("Bob", 30),
-    ("Charlie", 22),
-    ("Diana", 35)
+    ("Alice", 34),
+    ("Bob", 45),
+    ("Charlie", 29)
 ]
 columns = ["name", "age"]
 
+# Création du DataFrame
 df = spark.createDataFrame(data, columns)
 
-# Transformation : filtrer les personnes âgées de plus de 25 ans
-df_filtered = df.filter(col("age") > 25)
+# Définir le chemin de sortie
+output_path = "app/feeder"
 
-# Ajouter une colonne avec l'âge doublé
-df_transformed = df_filtered.withColumn("double_age", col("age") * 2)
+# S'assurer que le dossier existe (créé côté système de fichiers si besoin)
+os.makedirs(output_path, exist_ok=True)
 
-# Afficher le résultat
-df_transformed.show()
+# Écriture au format CSV (avec en-têtes et en un seul fichier)
+df.coalesce(1).write \
+    .option("header", True) \
+    .mode("overwrite") \
+    .csv(output_path)
 
-# Fermer la session Spark
+# Arrêt de la session Spark
 spark.stop()
