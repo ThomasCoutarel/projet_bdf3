@@ -192,3 +192,4 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 app/US_Accidents_March23.csv
+app/chargement_donnee/initial.csv/
